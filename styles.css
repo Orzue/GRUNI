@@ -121,6 +121,9 @@ button {
   transform: translateY(0);
 }
 
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 .button {
   display: inline-flex;
   min-height: 46px;
@@ -151,10 +154,15 @@ button {
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 2;
+  transition: transform 200ms ease;
 }
 
 .button:hover {
   transform: translateY(-2px);
+}
+
+.button:hover svg {
+  transform: translateX(3px);
 }
 
 .button--primary {
@@ -164,7 +172,7 @@ button {
 }
 
 .button--primary:hover {
-  box-shadow: 0 22px 54px rgba(70, 211, 154, 0.26);
+  box-shadow: 0 22px 54px rgba(70, 211, 154, 0.32);
 }
 
 .button--secondary {
@@ -185,7 +193,9 @@ button {
   font-size: 0.95rem;
 }
 
-/* Header */
+/* ============================================================
+   HEADER
+   ============================================================ */
 .site-header {
   position: sticky;
   top: 0;
@@ -215,6 +225,7 @@ button {
   gap: var(--space-4);
 }
 
+/* ── Brand con dot animado ── */
 .brand {
   display: inline-flex;
   align-items: center;
@@ -230,10 +241,27 @@ button {
   margin-right: 0.55rem;
   border-radius: 50%;
   background: var(--color-brand);
-  box-shadow: 0 0 0 7px rgba(70, 211, 154, 0.1);
+  box-shadow:
+    0 0 0 4px rgba(70, 211, 154, 0.12),
+    0 0 10px rgba(70, 211, 154, 0.2);
   content: "";
+  animation: brand-pulse 2.8s ease-in-out infinite;
 }
 
+@keyframes brand-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 4px rgba(70, 211, 154, 0.12),
+      0 0 10px rgba(70, 211, 154, 0.18);
+  }
+  50% {
+    box-shadow:
+      0 0 0 7px rgba(70, 211, 154, 0.18),
+      0 0 18px rgba(70, 211, 154, 0.28);
+  }
+}
+
+/* ── Nav links con indicador activo ── */
 .site-nav {
   display: flex;
   align-items: center;
@@ -241,6 +269,7 @@ button {
 }
 
 .site-nav a {
+  position: relative;
   border-radius: 999px;
   color: var(--color-muted-strong);
   font-size: 0.94rem;
@@ -255,6 +284,30 @@ button {
 .site-nav a:hover {
   background: rgba(255, 255, 255, 0.05);
   color: var(--color-text);
+}
+
+/* Underline animado al hacer hover en links de nav */
+.site-nav a:not(.nav-cta)::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 0.78rem;
+  right: 0.78rem;
+  height: 1.5px;
+  border-radius: 999px;
+  background: var(--color-brand);
+  transform: scaleX(0);
+  transition: transform 200ms ease;
+  transform-origin: left;
+}
+
+.site-nav a:not(.nav-cta):hover::after,
+.site-nav a.is-active::after {
+  transform: scaleX(1);
+}
+
+.site-nav a.is-active {
+  color: var(--color-brand-light);
 }
 
 .site-nav .nav-cta {
@@ -324,7 +377,9 @@ button {
   backdrop-filter: blur(4px);
 }
 
-/* Hero */
+/* ============================================================
+   HERO
+   ============================================================ */
 .hero {
   position: relative;
   display: grid;
@@ -379,6 +434,7 @@ button {
   max-width: 760px;
 }
 
+/* ── Eyebrow / Kicker con línea decorativa ── */
 .hero__brand,
 .eyebrow,
 .section-kicker,
@@ -389,6 +445,20 @@ button {
   font-weight: 800;
   line-height: 1.2;
   text-transform: uppercase;
+}
+
+.section-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.section-kicker::after {
+  content: "";
+  height: 1px;
+  width: 3rem;
+  background: linear-gradient(90deg, rgba(70, 211, 154, 0.55), transparent);
+  border-radius: 999px;
 }
 
 .hero__brand {
@@ -433,6 +503,7 @@ button {
   margin-top: 2rem;
 }
 
+/* ── Principle cards ── */
 .hero-principles {
   position: relative;
   z-index: 2;
@@ -442,6 +513,7 @@ button {
   margin-top: clamp(1.8rem, 3vw, 2.6rem);
 }
 
+/* ── Card base compartida ── */
 .principle-card,
 .problem-card,
 .service-card,
@@ -454,18 +526,57 @@ button {
   border-radius: var(--radius-md);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.022));
   box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Brillo de borde en hover con pseudo-element */
+.principle-card::before,
+.problem-card::before,
+.service-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(70, 211, 154, 0.12), rgba(70, 211, 154, 0.04), transparent 60%);
+  opacity: 0;
+  transition: opacity 280ms ease;
+  pointer-events: none;
+}
+
+.principle-card:hover::before,
+.problem-card:hover::before,
+.service-card:hover::before {
+  opacity: 1;
 }
 
 .principle-card {
   padding: 1.15rem;
+  transition:
+    transform var(--transition),
+    border-color 280ms ease,
+    box-shadow 280ms ease;
 }
 
+.principle-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-strong);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(70, 211, 154, 0.12);
+}
+
+/* ── Marker como pill badge ── */
 .principle-card__marker {
   display: inline-flex;
-  margin-bottom: 1rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
   color: var(--color-brand-light);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 800;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(70, 211, 154, 0.3);
+  border-radius: 999px;
+  background: rgba(70, 211, 154, 0.1);
+  padding: 0.22rem 0.62rem;
 }
 
 .principle-card h2,
@@ -485,7 +596,9 @@ button {
   line-height: 1.6;
 }
 
-/* Sections */
+/* ============================================================
+   SECTIONS
+   ============================================================ */
 .section {
   position: relative;
   padding: var(--section-space) 0;
@@ -537,6 +650,9 @@ button {
   line-height: 1.75;
 }
 
+/* ============================================================
+   PROBLEM CARDS
+   ============================================================ */
 .card-grid {
   display: grid;
   gap: var(--space-4);
@@ -552,9 +668,10 @@ button {
 .timeline-step,
 .expectation-item {
   transition:
-    transform var(--transition),
-    border-color var(--transition),
-    background-color var(--transition);
+    transform 240ms ease,
+    border-color 240ms ease,
+    background-color 240ms ease,
+    box-shadow 240ms ease;
 }
 
 .problem-card:hover,
@@ -562,9 +679,10 @@ button {
 .solution-card:hover,
 .timeline-step:hover,
 .expectation-item:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
   border-color: var(--color-border-strong);
-  background-color: rgba(70, 211, 154, 0.035);
+  background-color: rgba(70, 211, 154, 0.03);
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(70, 211, 154, 0.1);
 }
 
 .problem-card {
@@ -572,6 +690,7 @@ button {
   padding: 1.25rem;
 }
 
+/* Ícono de card con hover animado */
 .card-icon {
   width: 2.3rem;
   height: 2.3rem;
@@ -582,6 +701,13 @@ button {
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.8;
+  transition: transform 240ms ease, color 240ms ease;
+}
+
+.problem-card:hover .card-icon,
+.service-card:hover .card-icon {
+  transform: scale(1.12) rotate(-4deg);
+  color: var(--color-brand);
 }
 
 .problem-card h3,
@@ -608,7 +734,9 @@ button {
   line-height: 1.65;
 }
 
-/* Services */
+/* ============================================================
+   SERVICE CARDS
+   ============================================================ */
 .service-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -635,7 +763,96 @@ button {
   font-weight: 650;
 }
 
-/* Solutions */
+/* ============================================================
+   ABOUT / FOUNDER
+   ============================================================ */
+.about-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.72fr);
+  gap: var(--space-12);
+  align-items: start;
+}
+
+.about-copy {
+  max-width: 700px;
+}
+
+.founder-note {
+  align-self: start;
+  margin-top: 0.35rem;
+  border-left: 2px solid var(--color-brand);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 1.35rem 0 1.35rem 1.45rem;
+  background: linear-gradient(90deg, rgba(70, 211, 154, 0.08), rgba(255, 255, 255, 0.015) 62%, transparent);
+  box-shadow: none;
+  transition:
+    background 280ms ease,
+    box-shadow 280ms ease;
+}
+
+.founder-note:hover {
+  background: linear-gradient(90deg, rgba(70, 211, 154, 0.13), rgba(255, 255, 255, 0.02) 62%, transparent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.founder-note__header {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.05rem;
+}
+
+/* ── Avatar con ring glow ── */
+.founder-avatar {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 50%;
+  background: rgba(70, 211, 154, 0.08);
+  color: var(--color-brand-light);
+  font-size: 0.92rem;
+  font-weight: 800;
+  box-shadow:
+    0 0 0 4px rgba(70, 211, 154, 0.08),
+    0 0 0 8px rgba(70, 211, 154, 0.04);
+  transition:
+    box-shadow 280ms ease,
+    transform 280ms ease;
+}
+
+.founder-note:hover .founder-avatar {
+  box-shadow:
+    0 0 0 5px rgba(70, 211, 154, 0.14),
+    0 0 0 10px rgba(70, 211, 154, 0.06),
+    0 0 16px rgba(70, 211, 154, 0.18);
+  transform: scale(1.05);
+}
+
+.founder-note__label {
+  margin: 0 0 0.35rem;
+  color: var(--color-brand-light);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.founder-note__role {
+  margin-top: 0.28rem;
+  color: var(--color-brand-light);
+  font-weight: 700;
+}
+
+.founder-note .button {
+  margin-top: 1.2rem;
+}
+
+/* ============================================================
+   SOLUTIONS
+   ============================================================ */
 .solution-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -683,7 +900,9 @@ button {
   margin-left: 0;
 }
 
-/* Timeline */
+/* ============================================================
+   TIMELINE
+   ============================================================ */
 .timeline {
   position: relative;
   display: grid;
@@ -722,9 +941,21 @@ button {
   color: var(--color-brand-light);
   font-size: 0.82rem;
   font-weight: 800;
+  transition:
+    background 240ms ease,
+    box-shadow 240ms ease,
+    transform 240ms ease;
 }
 
-/* Expectations */
+.timeline-step:hover .timeline-step__number {
+  background: rgba(70, 211, 154, 0.12);
+  box-shadow: 0 0 0 4px rgba(70, 211, 154, 0.1);
+  transform: scale(1.08);
+}
+
+/* ============================================================
+   EXPECTATIONS
+   ============================================================ */
 .expectations-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
@@ -747,68 +978,9 @@ button {
   padding: 1.25rem 1.35rem;
 }
 
-/* About */
-.about-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.72fr);
-  gap: var(--space-12);
-  align-items: start;
-}
-
-.about-copy {
-  max-width: 700px;
-}
-
-.founder-note {
-  align-self: start;
-  margin-top: 0.35rem;
-  border-left: 2px solid var(--color-brand);
-  padding: 1.35rem 0 1.35rem 1.45rem;
-  background: linear-gradient(90deg, rgba(70, 211, 154, 0.055), rgba(255, 255, 255, 0.015) 62%, transparent);
-  box-shadow: none;
-}
-
-.founder-note__header {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
-  margin-bottom: 1.05rem;
-}
-
-.founder-avatar {
-  display: grid;
-  width: 3.25rem;
-  height: 3.25rem;
-  flex: 0 0 auto;
-  place-items: center;
-  border: 1px solid var(--color-border-strong);
-  border-radius: 50%;
-  background: rgba(70, 211, 154, 0.08);
-  color: var(--color-brand-light);
-  font-size: 0.92rem;
-  font-weight: 800;
-}
-
-.founder-note__label {
-  margin: 0 0 0.35rem;
-  color: var(--color-brand-light);
-  font-size: 0.78rem;
-  font-weight: 800;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.founder-note__role {
-  margin-top: 0.28rem;
-  color: var(--color-brand-light);
-  font-weight: 700;
-}
-
-.founder-note .button {
-  margin-top: 1.2rem;
-}
-
-/* FAQ */
+/* ============================================================
+   FAQ
+   ============================================================ */
 .faq-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
@@ -901,7 +1073,9 @@ button {
   padding-bottom: 1.75rem;
 }
 
-/* Contact */
+/* ============================================================
+   CONTACT
+   ============================================================ */
 .contact-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
@@ -1023,7 +1197,9 @@ button {
   display: none;
 }
 
-/* Footer */
+/* ============================================================
+   FOOTER
+   ============================================================ */
 .site-footer {
   border-top: 1px solid var(--color-border);
   background: #090b0d;
@@ -1074,19 +1250,13 @@ button {
   min-height: 2rem;
   align-items: center;
   color: var(--color-muted-strong);
-  transition: color var(--transition);
+  transition: color var(--transition), transform var(--transition);
 }
 
 .footer-nav a:hover,
 .footer-contact a:hover {
   color: var(--color-brand-light);
-}
-
-.footer-future-links {
-  max-width: 18rem;
-  margin-top: 0.95rem;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  transform: translateX(3px);
 }
 
 .footer-bottom {
@@ -1095,13 +1265,15 @@ button {
   padding-top: var(--space-6);
 }
 
-/* Progressive reveal */
+/* ============================================================
+   REVEAL ANIMATIONS — stagger por índice
+   ============================================================ */
 .js [data-reveal] {
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateY(18px);
   transition:
-    opacity 420ms ease,
-    transform 420ms ease;
+    opacity 500ms ease,
+    transform 500ms ease;
 }
 
 .js [data-reveal].is-visible {
@@ -1109,6 +1281,25 @@ button {
   transform: translateY(0);
 }
 
+/* Delay progresivo para grillas de cards */
+.js .card-grid [data-reveal]:nth-child(1),
+.js .service-grid [data-reveal]:nth-child(1),
+.js .hero-principles [data-reveal]:nth-child(1) { transition-delay: 0ms; }
+
+.js .card-grid [data-reveal]:nth-child(2),
+.js .service-grid [data-reveal]:nth-child(2),
+.js .hero-principles [data-reveal]:nth-child(2) { transition-delay: 80ms; }
+
+.js .card-grid [data-reveal]:nth-child(3),
+.js .service-grid [data-reveal]:nth-child(3),
+.js .hero-principles [data-reveal]:nth-child(3) { transition-delay: 160ms; }
+
+.js .card-grid [data-reveal]:nth-child(4),
+.js .service-grid [data-reveal]:nth-child(4) { transition-delay: 240ms; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media (max-width: 1120px) {
   .card-grid--four {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1236,6 +1427,11 @@ button {
     justify-content: center;
     text-align: center;
   }
+
+  /* Sin underline activo en mobile (drawer) */
+  .js .site-nav a:not(.nav-cta)::after {
+    display: none;
+  }
 }
 
 @media (max-width: 700px) {
@@ -1292,7 +1488,6 @@ button {
   .hero__brand {
     display: none;
   }
-    
 
   .hero__asset {
     display: none;
@@ -1351,8 +1546,12 @@ button {
     text-align: center;
   }
 
-  .section-kicker{
-    text-align: center;
+  .section-kicker {
+    justify-content: center;
+  }
+
+  .section-kicker::after {
+    display: none;
   }
 
   .founder-note {
@@ -1360,17 +1559,15 @@ button {
     padding: 1.2rem 0 1.2rem 1.25rem;
   }
 
-  .section-heading p{
+  .section-heading p {
     text-align: center;
   }
 
-
-  .contact-copy p{
+  .contact-copy p {
     text-align: center;
   }
 
-
-  .about-copy p{
+  .about-copy p {
     text-align: center;
   }
 
@@ -1398,6 +1595,13 @@ button {
 
   .footer-bottom {
     font-size: 0.92rem;
+  }
+
+  /* Sin delay en mobile para no sentir lentitud */
+  .js .card-grid [data-reveal]:nth-child(n),
+  .js .service-grid [data-reveal]:nth-child(n),
+  .js .hero-principles [data-reveal]:nth-child(n) {
+    transition-delay: 0ms;
   }
 }
 
@@ -1440,10 +1644,10 @@ button {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-    scroll-behavior: auto;
-    transition-duration: 0.01ms;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 
   .js [data-reveal],
@@ -1454,11 +1658,8 @@ button {
 }
 
 /* ============================================================
-   GRUNI — Landing recortada (QR / sobre)
-   Estilos añadidos: grillas de 3, servicios en 4,
-   CTA de sección, contacto final, botón y flotante WhatsApp.
+   GRUNI — Estilos de landing: grillas, CTA, contacto, WA
    ============================================================ */
-
 .card-grid--three {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -1501,7 +1702,7 @@ button {
   align-items: center;
 }
 
-/* Botón WhatsApp (verde real de WhatsApp para reconocimiento inmediato) */
+/* Botón WhatsApp */
 .button--wa {
   background: #25d366;
   color: #05261a;
@@ -1517,6 +1718,11 @@ button {
   width: 1.4rem;
   height: 1.4rem;
   flex: none;
+  transition: transform 200ms ease;
+}
+
+.button--wa:hover svg {
+  transform: scale(1.12) rotate(-5deg);
 }
 
 /* Botón flotante de WhatsApp */
@@ -1539,7 +1745,9 @@ button {
   transition:
     transform var(--transition),
     box-shadow var(--transition),
-    background-color var(--transition);
+    background-color var(--transition),
+    opacity 200ms ease,
+    visibility 200ms ease;
 }
 
 .wa-float:hover {
@@ -1552,6 +1760,61 @@ button {
   width: 1.7rem;
   height: 1.7rem;
   flex: none;
+}
+
+.wa-float--hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+
+/* ============================================================
+   Hero — canvas de red de nodos
+   ============================================================ */
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.hero.has-network .hero__asset {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__canvas {
+    display: none;
+  }
+  .hero.has-network .hero__asset {
+    opacity: 0.34;
+  }
+  .brand::before {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   Ajustes finales — contacto
+   ============================================================ */
+.contact-final__actions .button {
+  min-width: 260px;
+}
+
+.contact-final__actions .button--secondary {
+  background: rgba(70, 211, 154, 0.12);
+  border-color: var(--color-border-strong);
+  color: var(--color-brand-light);
+}
+
+.contact-final__actions .button--secondary:hover {
+  background: rgba(70, 211, 154, 0.2);
+  border-color: var(--color-brand);
+  color: var(--color-brand-light);
 }
 
 @media (max-width: 620px) {
@@ -1571,9 +1834,9 @@ button {
   .contact-final__actions .button {
     justify-content: center;
     width: 100%;
+    min-width: 0;
   }
 
-  /* En mobile el flotante muestra solo el ícono para no tapar contenido */
   .wa-float__label {
     display: none;
   }
@@ -1594,72 +1857,41 @@ button {
 }
 
 /* ============================================================
-   Hero — red de nodos animada (canvas)
+   SCROLL COUNTER — números animados
    ============================================================ */
-.hero__canvas {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  pointer-events: none;
-}
-
-/* Cuando el canvas está activo, la imagen de respaldo se oculta.
-   Si el JS no corre (o hay reduce-motion), la imagen vuelve a verse. */
-.hero.has-network .hero__asset {
-  opacity: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__canvas {
-    display: none;
-  }
-  .hero.has-network .hero__asset {
-    opacity: 0.34;
-  }
-}
-
-/* Ocultar el flotante de WhatsApp cuando el bloque de contacto está a la vista */
-.wa-float {
-  transition:
-    transform var(--transition),
-    box-shadow var(--transition),
-    background-color var(--transition),
-    opacity 200ms ease,
-    visibility 200ms ease;
-}
-
-.wa-float--hidden {
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(12px);
-  pointer-events: none;
+.stat-counter {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ============================================================
-   Ajustes finales — contacto: botones parejos y con color
+   CURSOR DE LUZ EN CARDS — spotlight que sigue al mouse
    ============================================================ */
-.contact-final__actions .button {
-  min-width: 260px;
+.problem-card.has-glow::after,
+.service-card.has-glow::after,
+.principle-card.has-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: radial-gradient(
+    280px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(70, 211, 154, 0.1),
+    transparent 65%
+  );
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 200ms ease;
 }
 
-/* Botón de email: fondo con color de marca en vez de gris apagado */
-.contact-final__actions .button--secondary {
-  background: rgba(70, 211, 154, 0.12);
-  border-color: var(--color-border-strong);
-  color: var(--color-brand-light);
-}
-
-.contact-final__actions .button--secondary:hover {
-  background: rgba(70, 211, 154, 0.2);
-  border-color: var(--color-brand);
-  color: var(--color-brand-light);
-}
-
-@media (max-width: 620px) {
-  .contact-final__actions .button {
-    min-width: 0;
-  }
+/* Cuando no hay glow, el after del before se resetea */
+.problem-card:not(.has-glow)::after,
+.service-card:not(.has-glow)::after,
+.principle-card:not(.has-glow)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  pointer-events: none;
 }
